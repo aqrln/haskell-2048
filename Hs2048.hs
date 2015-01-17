@@ -3,8 +3,8 @@ import System.Random
 import Control.Applicative
 
 type Tile = Maybe Integer
-data GameField = GameField [[Tile]]
-                 deriving (Eq)
+newtype GameField = GameField [[Tile]]
+                    deriving (Eq)
 
 instance Show GameField where
     show (GameField gameField) = intercalate "\n"
