@@ -7,10 +7,18 @@ newtype GameField = GameField [[Tile]]
                     deriving (Eq)
 
 instance Show GameField where
-    show (GameField gameField) = intercalate "\n"
-                                 $ map (unwords . map showTile) gameField
-         where showTile Nothing = "."
-               showTile (Just x)  = show x
+    show (GameField gameField) =
+         let showTile Nothing = ""
+             showTile (Just x)  = show x
+             maxTileLength =
+                 maximum $ map (maximum . map (length . showTile)) gameField
+             showRow row =
+                 '|' : (intercalate "|" $ map (decorate . showTile) row) ++ "|"
+                 ++ '\n' : showLine
+             showLine =
+                 replicate ((maxTileLength + 3) * (length $ head gameField) + 1) '-'
+             decorate s = ' ' : s ++ replicate (maxTileLength - length s + 1) ' '
+          in intercalate "\n" $ showLine : map showRow gameField
 
 gfmap :: ([[Tile]] -> [[Tile]]) -> GameField -> GameField
 gfmap f (GameField gameFieldData) = GameField (f gameFieldData)
