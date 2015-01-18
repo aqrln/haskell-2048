@@ -13,12 +13,12 @@ instance Show GameField where
              maxTileLength =
                  maximum $ map (maximum . map (length . showTile)) gameField
              showRow row =
-                 '|' : (intercalate "|" $ map (decorate . showTile) row) ++ "|"
-                 ++ '\n' : showLine
-             showLine =
-                 replicate ((maxTileLength + 3) * (length $ head gameField) + 1) '-'
+                 let s = '|' : (intercalate "|" $ map (decorate . showTile) row) ++ "|"
+                  in s ++ '\n' : showLine (length s)
+             showLine n = replicate n '-'
+             showFullLine = showLine ((maxTileLength + 3) * (length $ head gameField) + 1)
              decorate s = ' ' : s ++ replicate (maxTileLength - length s + 1) ' '
-          in intercalate "\n" $ showLine : map showRow gameField
+          in intercalate "\n" $ showFullLine : map showRow gameField
 
 gfmap :: ([[Tile]] -> [[Tile]]) -> GameField -> GameField
 gfmap f (GameField gameFieldData) = GameField (f gameFieldData)
