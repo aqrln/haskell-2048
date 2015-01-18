@@ -20,7 +20,6 @@ moveLeft = gfmap $ map moveRow where
     moveRow row = let (tiles, nothings) = partition (/= Nothing) row
                    in join tiles ++ nothings
                      where join [] = []
-                           join xs@(Nothing:_) = xs
                            join (x:y:ys)
                              | x == y = ((+) <$> x <*> y) : join ys ++ [Nothing]
                            join (x:xs) = x : join xs
