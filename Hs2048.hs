@@ -58,6 +58,11 @@ addTileToRandomPos gf@(GameField gfData) tile = do
         (left, _:right) = splitAt j row
     return $ GameField $ upper ++ (left ++ tile:right):lower
 
+hasAvailableMoves :: GameField -> Bool
+hasAvailableMoves gameField = or $
+                              map ((/= gameField) . ($ gameField))
+                              [moveLeft, moveRight, moveUp, moveDown]
+
 gameLoop :: GameField -> IO ()
 gameLoop gameField = do
     gameField' <- addTileToRandomPos gameField $ Just 2
@@ -65,7 +70,9 @@ gameLoop gameField = do
       where
         performInput gameField = do
             print gameField
-            putStrLn "Your command ([l]eft, [r]ight, [u]p, [d]own, [s]top)?"
+            if hasAvailableMoves gameField
+               then putStrLn "Your command ([l]eft, [r]ight, [u]p, [d]own, [s]top)?"
+               else putStrLn "Game over. Press [s] to exit."
             input <- getLine
             case input of "l" -> newMove moveLeft  gameField
                           "r" -> newMove moveRight gameField
