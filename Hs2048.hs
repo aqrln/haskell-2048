@@ -9,7 +9,7 @@ newtype GameField = GameField [[Tile]]
 instance Show GameField where
     show (GameField gameField) =
          let showTile Nothing = ""
-             showTile (Just x)  = show x
+             showTile (Just x) = show x
              maxTileLength =
                  maximum $ map (maximum . map (length . showTile)) gameField
              showRow row =
